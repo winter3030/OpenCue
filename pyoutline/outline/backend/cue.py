@@ -258,6 +258,12 @@ def _serialize(launcher, use_pycuerun):
     elif launcher.get("priority"):
         _warning_spec_version(spec_version, "priority")
     sub_element(j, "maxretries", str(launcher.get("maxretries")))
+    if spec_version >= Version("1.13"):
+        if ol.get_maxcores():
+            sub_element(j, "maxcores", str(ol.get_maxcores()))
+    else:
+        if ol.get_maxcores():
+            _warning_spec_version(spec_version, "maxcores")
     sub_element(j, "autoeat", str(launcher.get("autoeat")))
 
     if ol.get_arg("localbook"):

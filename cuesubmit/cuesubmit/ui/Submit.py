@@ -121,6 +121,18 @@ class CueSubmitWidget(QtWidgets.QWidget):
             completers=self.getFilteredHistorySetting('submit/shotName'),
             validators=[Validators.matchNoSpecialCharactersOnly]
         )
+        self.maxcoresInput = Widgets.CueLabelLineEdit(
+            'Max Cores:',
+            '6',
+            tooltip='Maximum number of cores to run. ',
+            validators=[Validators.matchNumbersOnly]
+        )
+        self.priorityInput = Widgets.CueLabelLineEdit(
+            'Priority:',
+            '5',
+            tooltip='Job priority. ',
+            validators=[Validators.matchNumbersOnly]
+        )
         self.layerNameInput = Widgets.CueLabelLineEdit(
             'Layer Name:',
             tooltip='Name for this layer of the job. Should be more than 3 characters, '
@@ -198,6 +210,8 @@ class CueSubmitWidget(QtWidgets.QWidget):
         self.submitButtons.submitted.connect(self.submit)
         self.jobTreeWidget.selectionChanged.connect(self.jobLayerSelectionChanged)
         self.jobNameInput.lineEdit.textChanged.connect(self.jobDataChanged)
+        self.maxcoresInput.lineEdit.textChanged.connect(self.jobDataChanged)
+        self.priorityInput.lineEdit.textChanged.connect(self.jobDataChanged)
         self.layerNameInput.lineEdit.textChanged.connect(self.jobDataChanged)
         self.frameBox.frameSpecInput.lineEdit.textChanged.connect(self.jobDataChanged)
         self.settingsWidget.dataChanged.connect(self.jobDataChanged)
@@ -224,6 +238,8 @@ class CueSubmitWidget(QtWidgets.QWidget):
         self.facilityLayout.setHorizontalSpacing(20)
         self.facilityLayout.setColumnStretch(1, 1)
         self.facilityLayout.addWidget(self.facilitySelector, 0, 0, 1, 1, QtCore.Qt.AlignLeft)
+        self.facilityLayout.addWidget(self.maxcoresInput, 0, 1)
+        self.facilityLayout.addWidget(self.priorityInput, 0, 2)
         self.jobInfoLayout.addLayout(self.facilityLayout, QtCore.Qt.AlignLeft)
 
         self.scrollingLayout.addLayout(self.jobInfoLayout)
@@ -272,6 +288,8 @@ class CueSubmitWidget(QtWidgets.QWidget):
             'username': self.userNameInput.text(),
             'show': self.showSelector.text(),
             'shot': self.shotInput.text(),
+            'maxcores': self.maxcoresInput.text(),
+            'priority': self.priorityInput.text(),
             'layers': self.jobTreeWidget.getAllLayers()
         }
         facility = self.facilitySelector.text()
