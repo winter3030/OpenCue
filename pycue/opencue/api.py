@@ -28,6 +28,7 @@ from opencue.compiled_proto import filter_pb2
 from opencue.compiled_proto import host_pb2
 from opencue.compiled_proto import job_pb2
 from opencue.compiled_proto import limit_pb2
+from opencue.compiled_proto import opencueUser_pb2
 from opencue.compiled_proto import renderPartition_pb2
 from opencue.compiled_proto import report_pb2
 from opencue.compiled_proto import service_pb2
@@ -49,6 +50,7 @@ from .wrappers.job import Job
 from .wrappers.layer import Layer
 from .wrappers.limit import Limit
 from .wrappers.owner import Owner
+from .wrappers.opencueuser import OpencueUser
 from .wrappers.proc import Proc
 from .wrappers.service import Service
 from .wrappers.show import Show
@@ -59,11 +61,11 @@ from . import util
 
 
 __protobufs = [comment_pb2, criterion_pb2, cue_pb2, department_pb2, depend_pb2, facility_pb2,
-               filter_pb2, host_pb2, job_pb2, renderPartition_pb2, report_pb2, service_pb2,
+               filter_pb2, host_pb2, job_pb2, opencueUser_pb2, renderPartition_pb2, report_pb2, service_pb2,
                show_pb2, subscription_pb2, task_pb2]
 
 __wrappers = [Action, Allocation, Comment, Depend, Filter, Frame, Group, Host, Job, Layer, Matcher,
-              NestedHost, Proc, Show, Subscription, Task]
+              NestedHost, OpencueUser, Proc, Show, Subscription, Task]
 
 
 #
@@ -794,3 +796,53 @@ def getLimits():
     :return: a list of Limit objects"""
     return [Limit(limit) for limit in Cuebot.getStub('limit').GetAll(
         limit_pb2.LimitGetAllRequest(), timeout=Cuebot.Timeout).limits]
+
+#User
+@util.grpcExceptionParser
+def createUser(user):
+    """Creates a new user.
+
+     :type  user: opencueUser_pb2.User
+     :param user: a new user
+     :rtype:  str
+     :return: state success or failed"""
+    # test=opencueuser_pb2.User(name='test')
+    return Cuebot.getStub('opencueUser').Create(
+        opencueUser_pb2.UserCreateRequest(user=user), timeout=Cuebot.Timeout).state
+
+@util.grpcExceptionParser
+def getUserInfo(name):
+    """Returns a User object for the given name.
+    This will return one or zero user object.
+
+    :type  name: str
+    :param name: a user name
+    :rtype:  User
+    :return: a User object"""
+    return OpencueUser(Cuebot.getStub('opencueUser').Get(
+        opencueUser_pb2.UserGetRequest(name=name), timeout=Cuebot.Timeout).user)
+
+@util.grpcExceptionParser
+def getUserInfos():
+    """Returns all User object.
+
+    :rtype:  list
+    :return: a list of User object"""
+
+@util.grpcExceptionParser
+def deleteUserInfos(name):
+    """Delete a User for the given name.
+
+    :type  name: str
+    :param name: a user name
+    :rtype:  opencueuser_pb2.UserDeleteResponse
+    :return: empty response"""
+
+@util.grpcExceptionParser
+def updateUserInfo(user):
+    """Update a User.
+
+    :type  name: opencueuser_pb2.User
+    :param name: Update user
+    :rtype:  str
+    :return: state success or failed"""

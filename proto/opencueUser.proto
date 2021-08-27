@@ -1,0 +1,87 @@
+syntax = "proto3";
+package opencueUser;
+
+option java_package = "com.imageworks.spcue.grpc.opencueUser";
+option java_multiple_files = true;
+
+// -------- Services -------- grpc服務 代表gRPC接口
+
+service OpencueUserInterface {
+    // 建立user
+    rpc Create(UserCreateRequest) returns (UserCreateResponse);
+
+    // 取得user
+    rpc Get(UserGetRequest) returns (UserGetResponse);
+
+    // 取得所有user
+    rpc GetAll(UserGetAllRequest) returns (UserGetAllResponse);
+
+    // 刪除 A User is never really deleted, just make inactive.
+    rpc Delete(UserDeleteRequest) returns (UserDeleteResponse);
+
+    // 更新user
+    rpc Update(UserUpdateRequest) returns (UserUpdateResponse);
+}
+
+// -------- Primary Message Types -------- grpc資料結構
+
+message User {
+    string name = 1;
+    bool admin = 2;
+    int32 job_priority = 3;
+    int32 job_max_cores =4;
+    string show = 5;
+    int32 show_min_cores = 6;
+    int32 show_max_cores = 7;
+    bool activate = 8;
+    int32 priority_weight =9;
+    int32 error_weight = 10;
+    int32 submit_time_weight = 11;
+}
+
+message UserSeq {
+    repeated User users = 1;
+}
+
+// -------- Requests & Responses --------
+
+// Create
+message UserCreateRequest {
+    User user = 1;
+}
+
+message UserCreateResponse {
+    string state = 1;
+}
+
+// Get
+message UserGetRequest {
+    string name = 1;
+}
+
+message UserGetResponse {
+    User user = 1;
+}
+
+// GetAll
+message UserGetAllRequest {} // Empty
+
+message UserGetAllResponse {
+    UserSeq userseq = 1;
+}
+
+// Delete
+message UserDeleteRequest {
+    string name = 1;
+}
+
+message UserDeleteResponse {} // Empty
+
+// Update
+message UserUpdateRequest {
+    User user = 1;
+}
+
+message UserUpdateResponse {
+    string state = 1;
+}
