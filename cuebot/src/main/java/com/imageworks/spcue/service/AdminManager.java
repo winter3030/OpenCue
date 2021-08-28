@@ -28,6 +28,7 @@ import com.imageworks.spcue.ShowEntity;
 import com.imageworks.spcue.ShowInterface;
 import com.imageworks.spcue.SubscriptionEntity;
 import com.imageworks.spcue.SubscriptionInterface;
+import com.imageworks.spcue.UserEntity;
 
 public interface AdminManager {
 
@@ -91,5 +92,7 @@ public interface AdminManager {
     void setLimitName(LimitInterface limit, String name);
     void setLimitMaxValue(LimitInterface limit, int maxValue);
 
+    void createUser(UserEntity user);
+    UserEntity getUserInfo(String name);
 }
 

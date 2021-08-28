@@ -34,6 +34,7 @@ import com.imageworks.spcue.ShowEntity;
 import com.imageworks.spcue.ShowInterface;
 import com.imageworks.spcue.SubscriptionEntity;
 import com.imageworks.spcue.SubscriptionInterface;
+import com.imageworks.spcue.UserEntity;
 import com.imageworks.spcue.dao.AllocationDao;
 import com.imageworks.spcue.dao.DepartmentDao;
 import com.imageworks.spcue.dao.FacilityDao;
@@ -41,6 +42,7 @@ import com.imageworks.spcue.dao.LimitDao;
 import com.imageworks.spcue.dao.ShowDao;
 import com.imageworks.spcue.dao.SubscriptionDao;
 import com.imageworks.spcue.service.JobSpec;
+import com.imageworks.spcue.dao.UserDao;
 
 @Transactional
 public class AdminManagerService implements AdminManager {
@@ -61,6 +63,8 @@ public class AdminManagerService implements AdminManager {
     private GroupManager groupManager;
 
     private LimitDao limitDao;
+
+    private UserDao userDao;
 
     public void setShowActive(ShowInterface show, boolean value) {
         showDao.updateActive(show, value);
@@ -327,6 +331,20 @@ public class AdminManagerService implements AdminManager {
 
     public void setLimitDao(LimitDao limitDao) {
         this.limitDao = limitDao;
+    }
+
+    @Override
+    public void createUser(UserEntity user){ userDao.createUser(user); }
+
+    @Override
+    public UserEntity getUserInfo(String name) { return userDao.getUserInfo(name); }
+
+    public UserDao getUserDao() {
+        return userDao;
+    }
+
+    public void setUserDao(UserDao userDao) {
+        this.userDao = userDao;
     }
 }
 

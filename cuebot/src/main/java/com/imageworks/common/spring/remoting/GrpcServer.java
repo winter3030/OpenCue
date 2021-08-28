@@ -35,6 +35,7 @@ import com.imageworks.spcue.servant.ManageServiceOverride;
 import com.imageworks.spcue.servant.ManageShow;
 import com.imageworks.spcue.servant.ManageSubscription;
 import com.imageworks.spcue.servant.ManageTask;
+import com.imageworks.spcue.servant.ManageUser;
 import com.imageworks.spcue.servant.RqdReportStatic;
 
 
@@ -98,6 +99,7 @@ public class GrpcServer implements ApplicationContextAware {
                 .addService(applicationContext.getBean("manageShow", ManageShow.class))
                 .addService(applicationContext.getBean("manageSubscription", ManageSubscription.class))
                 .addService(applicationContext.getBean("manageTask", ManageTask.class))
+                .addService(applicationContext.getBean("manageUser", ManageUser.class))
                 .maxInboundMessageSize(maxMessageBytes)
                 .intercept(new CueServerInterceptor())
                 .build();

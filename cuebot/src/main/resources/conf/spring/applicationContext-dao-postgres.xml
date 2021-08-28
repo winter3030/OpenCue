@@ -143,5 +143,9 @@
         <property name="dataSource" ref="cueDataSource" />
     </bean>
 
+    <bean id="userDao" class="com.imageworks.spcue.dao.postgres.UserDaoJdbc">
+        <property name="dataSource" ref="cueDataSource" />
+    </bean>
+
 </beans>
 

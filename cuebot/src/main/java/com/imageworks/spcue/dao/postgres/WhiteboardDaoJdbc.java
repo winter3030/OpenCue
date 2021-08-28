@@ -122,6 +122,7 @@ import com.imageworks.spcue.grpc.subscription.Subscription;
 import com.imageworks.spcue.grpc.subscription.SubscriptionSeq;
 import com.imageworks.spcue.grpc.task.Task;
 import com.imageworks.spcue.grpc.task.TaskSeq;
+import com.imageworks.spcue.grpc.opencueUser.User;
 import com.imageworks.spcue.util.Convert;
 import com.imageworks.spcue.util.CueUtil;
 import com.imageworks.spcue.util.SqlUtil;
@@ -2275,5 +2276,30 @@ public class WhiteboardDaoJdbc extends JdbcDaoSupport implements WhiteboardDao {
     public void setProcSearchFactory(ProcSearchFactory procSearchFactory) {
         this.procSearchFactory = procSearchFactory;
     }
+
+    public User getUserInfo(String name){
+        //logger.error("WhiteboardDaoJdbc getUserInfo");
+        String getUserInfoQuery = "SELECT * FROM opencue_user WHERE pk_name = ?";
+        return getJdbcTemplate().queryForObject(getUserInfoQuery,USER_MAPPER,name);
+    }
+
+    public static final RowMapper<User> USER_MAPPER = new RowMapper<User>() {
+        @Override
+        public User mapRow(ResultSet rs, int rowNum) throws SQLException {
+            User.Builder userBuilder = User.newBuilder();
+            userBuilder.setName(rs.getString("pk_name"));
+            userBuilder.setAdmin(rs.getBoolean("b_admin"));
+            userBuilder.setJobPriority(rs.getInt("int_job_priority"));
+            userBuilder.setJobMaxCores(rs.getInt("int_job_max_cores"));
+            userBuilder.setShow(rs.getString("str_show"));
+            userBuilder.setShowMinCores(rs.getInt("int_show_min_cores"));
+            userBuilder.setShowMaxCores(rs.getInt("int_show_max_cores"));
+            userBuilder.setActivate(rs.getBoolean("b_activate"));
+            userBuilder.setPriorityWeight(rs.getInt("int_priority_weight"));
+            userBuilder.setErrorWeight(rs.getInt("int_error_weight"));
+            userBuilder.setSubmitTimeWeight(rs.getInt("int_submit_time_weight"));
+            return userBuilder.build();
+        }
+    };
 }
 

@@ -193,6 +193,11 @@
         <property name="departmentManager" ref="departmentManager" />
     </bean>
 
+    <bean scope="prototype" id="manageUser" class="com.imageworks.spcue.servant.ManageUser">
+        <property name="adminManager" ref="adminManager" />
+        <property name="whiteboard" ref="whiteboard" />
+    </bean>
+
     <bean scope="prototype" id="rqdReportStatic" class="com.imageworks.spcue.servant.RqdReportStatic">
         <property name="frameCompleteHandler" ref="frameCompleteHandler" />
         <property name="hostReportHandler" ref="hostReportHandler" />

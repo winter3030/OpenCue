@@ -85,6 +85,8 @@ import com.imageworks.spcue.grpc.subscription.Subscription;
 import com.imageworks.spcue.grpc.subscription.SubscriptionSeq;
 import com.imageworks.spcue.grpc.task.Task;
 import com.imageworks.spcue.grpc.task.TaskSeq;
+import com.imageworks.spcue.grpc.opencueUser.User;
+import com.imageworks.spcue.grpc.opencueUser.UserSeq;
 
 /**
  * @category DAO
@@ -700,5 +702,7 @@ public interface WhiteboardDao {
      * @return Layer
      */
     List<Limit> getLimits();
+
+    User getUserInfo(String name);
 }
 

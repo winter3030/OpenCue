@@ -237,6 +237,7 @@
     <property name="facilityDao" ref="facilityDao" />
     <property name="limitDao" ref="limitDao" />
     <property name="groupManager" ref="groupManager"/>
+    <property name="userDao" ref="userDao" />
   </bean>
 
   <bean id="historicalManager" class="com.imageworks.spcue.service.HistoricalManagerService">
