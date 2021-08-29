@@ -2,11 +2,17 @@ package com.imageworks.spcue.servant;
 
 import com.imageworks.spcue.UserEntity;
 import com.imageworks.spcue.grpc.opencueUser.OpencueUserInterfaceGrpc;
+import com.imageworks.spcue.grpc.opencueUser.User;
 import com.imageworks.spcue.grpc.opencueUser.UserCreateRequest;
 import com.imageworks.spcue.grpc.opencueUser.UserCreateResponse;
+import com.imageworks.spcue.grpc.opencueUser.UserDeleteRequest;
+import com.imageworks.spcue.grpc.opencueUser.UserDeleteResponse;
+import com.imageworks.spcue.grpc.opencueUser.UserGetAllRequest;
+import com.imageworks.spcue.grpc.opencueUser.UserGetAllResponse;
 import com.imageworks.spcue.grpc.opencueUser.UserGetRequest;
 import com.imageworks.spcue.grpc.opencueUser.UserGetResponse;
-import com.imageworks.spcue.grpc.opencueUser.User;
+import com.imageworks.spcue.grpc.opencueUser.UserUpdateRequest;
+import com.imageworks.spcue.grpc.opencueUser.UserUpdateResponse;
 import com.imageworks.spcue.service.AdminManager;
 import com.imageworks.spcue.service.Whiteboard;
 import io.grpc.Status;
@@ -62,6 +68,67 @@ public class ManageUser extends OpencueUserInterfaceGrpc.OpencueUserInterfaceImp
             logger.error("Failed to get user info.", e);
             responseObserver.onError(Status.INTERNAL
                     .withDescription("Failed to get user info: " + e.getMessage())
+                    .withCause(e)
+                    .asRuntimeException());
+        }
+    }
+
+    @Override
+    public void getAll(UserGetAllRequest request, StreamObserver<UserGetAllResponse> responseObserver) {
+        try{
+            responseObserver.onNext(UserGetAllResponse.newBuilder()
+                    .setUserseq(whiteboard.getUserInfos())
+                    .build());
+            responseObserver.onCompleted();
+        }catch (Exception e){
+            logger.error("Failed to getAll user infos.", e);
+            responseObserver.onError(Status.INTERNAL
+                    .withDescription("Failed to getAll user infos: " + e.getMessage())
+                    .withCause(e)
+                    .asRuntimeException());
+        }
+    }
+
+    @Override
+    public void delete(UserDeleteRequest request, StreamObserver<UserDeleteResponse> responseObserver) {
+        try{
+            adminManager.deleteUser(request.getName());
+            responseObserver.onNext(UserDeleteResponse.newBuilder().build());
+            responseObserver.onCompleted();
+        }catch (Exception e){
+            logger.error("Failed to delete user.", e);
+            responseObserver.onError(Status.INTERNAL
+                    .withDescription("Failed to delete user: " + e.getMessage())
+                    .withCause(e)
+                    .asRuntimeException());
+        }
+    }
+
+    @Override
+    public void update(UserUpdateRequest request, StreamObserver<UserUpdateResponse> responseObserver) {
+        try {
+            User grpcUser = request.getUser();
+            UserEntity user = new UserEntity();
+            user.name = grpcUser.getName();
+            user.admin = grpcUser.getAdmin();
+            user.job_priority = grpcUser.getJobPriority();
+            user.job_max_cores = grpcUser.getJobMaxCores();
+            user.show = grpcUser.getShow();
+            user.show_min_cores = grpcUser.getShowMinCores();
+            user.show_max_cores = grpcUser.getShowMaxCores();
+            user.activate = grpcUser.getActivate();
+            user.priority_weight = grpcUser.getPriorityWeight();
+            user.error_weight = grpcUser.getErrorWeight();
+            user.submit_time_weight = grpcUser.getSubmitTimeWeight();
+            adminManager.updateUserInfo(user);
+            responseObserver.onNext(UserUpdateResponse.newBuilder()
+                    .setState("Successfully updated user.")
+                    .build());
+            responseObserver.onCompleted();
+        } catch (Exception e){
+            logger.error("Failed to update user.", e);
+            responseObserver.onError(Status.INTERNAL
+                    .withDescription("Failed to update user: " + e.getMessage())
                     .withCause(e)
                     .asRuntimeException());
         }

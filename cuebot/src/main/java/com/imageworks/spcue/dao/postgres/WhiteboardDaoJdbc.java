@@ -28,6 +28,7 @@ import java.util.Locale;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import com.imageworks.spcue.grpc.opencueUser.UserSeq;
 import org.apache.log4j.Logger;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
@@ -2281,6 +2282,12 @@ public class WhiteboardDaoJdbc extends JdbcDaoSupport implements WhiteboardDao {
         //logger.error("WhiteboardDaoJdbc getUserInfo");
         String getUserInfoQuery = "SELECT * FROM opencue_user WHERE pk_name = ?";
         return getJdbcTemplate().queryForObject(getUserInfoQuery,USER_MAPPER,name);
+    }
+
+    public UserSeq getUserInfos(){
+        String getUserInfosQuery = "SELECT * FROM opencue_user";
+        List<User> users = getJdbcTemplate().query(getUserInfosQuery,USER_MAPPER);
+        return UserSeq.newBuilder().addAllUsers(users).build();
     }
 
     public static final RowMapper<User> USER_MAPPER = new RowMapper<User>() {

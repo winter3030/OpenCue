@@ -92,7 +92,12 @@ public interface AdminManager {
     void setLimitName(LimitInterface limit, String name);
     void setLimitMaxValue(LimitInterface limit, int maxValue);
 
+    /*
+     * User
+     */
     void createUser(UserEntity user);
     UserEntity getUserInfo(String name);
+    void deleteUser(String name);
+    void updateUserInfo(UserEntity user);
 }
 

@@ -7,4 +7,8 @@ public interface UserDao {
     public void createUser(UserEntity user);
 
     public UserEntity getUserInfo(String name);
+
+    public void deleteUser(String name);
+
+    public void updateUserInfo(UserEntity user);
 }

@@ -339,6 +339,16 @@ public class AdminManagerService implements AdminManager {
     @Override
     public UserEntity getUserInfo(String name) { return userDao.getUserInfo(name); }
 
+    @Override
+    public void deleteUser(String name) {
+        userDao.deleteUser(name);
+    }
+
+    @Override
+    public void updateUserInfo(UserEntity user) {
+        userDao.updateUserInfo(user);
+    }
+
     public UserDao getUserDao() {
         return userDao;
     }

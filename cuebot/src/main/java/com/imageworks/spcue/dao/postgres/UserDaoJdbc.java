@@ -49,4 +49,22 @@ public class UserDaoJdbc extends JdbcDaoSupport implements UserDao {
         String getUserInfoQuery = "SELECT * FROM opencue_user WHERE pk_name = ?";
         return getJdbcTemplate().queryForObject(getUserInfoQuery,USER_MAPPER,name);
     }
+
+    @Override
+    public void deleteUser(String name) {
+        getJdbcTemplate().update(
+                "UPDATE opencue_user SET b_activate = false WHERE pk_name = ?", name);
+    }
+
+    @Override
+    public void updateUserInfo(UserEntity user) {
+        getJdbcTemplate().update(
+                "UPDATE opencue_user SET b_admin=?, int_job_priority=?, int_job_max_cores=?," +
+                        " str_show=?, int_show_min_cores=?, int_show_max_cores=?, b_activate=?," +
+                        " int_priority_weight=?, int_error_weight=?, int_submit_time_weight=? " +
+                        "WHERE pk_name = ?",
+                user.admin, user.job_priority, user.job_max_cores, user.show, user.show_min_cores,
+                user.show_max_cores, user.activate, user.priority_weight, user.error_weight,
+                user.submit_time_weight, user.name);
+    }
 }

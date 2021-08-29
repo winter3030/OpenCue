@@ -828,15 +828,21 @@ def getUserInfos():
 
     :rtype:  list
     :return: a list of User object"""
+    opencueUser_pb2.UserGetAllResponse
+    userlist = Cuebot.getStub('opencueUser').GetAll(
+        opencueUser_pb2.UserGetAllRequest(), timeout=Cuebot.Timeout).userseq
+    return [OpencueUser(user) for user in userlist.users]
 
 @util.grpcExceptionParser
-def deleteUserInfos(name):
+def deleteUser(name):
     """Delete a User for the given name.
 
     :type  name: str
     :param name: a user name
     :rtype:  opencueuser_pb2.UserDeleteResponse
     :return: empty response"""
+    return Cuebot.getStub('opencueUser').Delete(
+        opencueUser_pb2.UserDeleteRequest(name=name), timeout=Cuebot.Timeout)
 
 @util.grpcExceptionParser
 def updateUserInfo(user):
@@ -846,3 +852,5 @@ def updateUserInfo(user):
     :param name: Update user
     :rtype:  str
     :return: state success or failed"""
+    return Cuebot.getStub('opencueUser').Update(
+        opencueUser_pb2.UserUpdateRequest(user=user), timeout=Cuebot.Timeout).state

@@ -703,6 +703,19 @@ public interface WhiteboardDao {
      */
     List<Limit> getLimits();
 
+    /**
+     * Return an userinfo by name.
+     *
+     * @param name String
+     * @return User
+     */
     User getUserInfo(String name);
+
+    /**
+     * Return a list of all userinfos.
+     *
+     * @return UserSeq
+     */
+    UserSeq getUserInfos();
 }
 

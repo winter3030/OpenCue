@@ -94,6 +94,7 @@ import com.imageworks.spcue.grpc.subscription.SubscriptionSeq;
 import com.imageworks.spcue.grpc.task.Task;
 import com.imageworks.spcue.grpc.task.TaskSeq;
 import com.imageworks.spcue.grpc.opencueUser.User;
+import com.imageworks.spcue.grpc.opencueUser.UserSeq;
 
 
 /**
@@ -530,6 +531,11 @@ public class WhiteboardService implements Whiteboard {
     @Override
     public User getUserInfo(String name) {
         return whiteboardDao.getUserInfo(name);
+    }
+
+    @Override
+    public UserSeq getUserInfos() {
+        return whiteboardDao.getUserInfos();
     }
 }
 
