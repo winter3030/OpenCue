@@ -55,6 +55,7 @@ import cuegui.ShowDialog
 import cuegui.TasksDialog
 import cuegui.UnbookDialog
 import cuegui.Utils
+import cuegui.UserDialog
 
 
 logger = cuegui.Logger.getLogger(__file__)
@@ -1824,6 +1825,22 @@ class LimitActions(AbstractActions):
                 self.cuebotCall(limits[0].rename, "Rename failed.", value)
             self._update()
 
+class UserActions(AbstractActions):
+    def __init__(self, *args):
+        AbstractActions.__init__(self, *args)
+
+    editUser_info = ["Edit User info", None, "configure"]
+    def editUser(self, rpcObjects=None):
+        user = self._getSelected(rpcObjects)
+        user_dialog = cuegui.UserDialog.UserDialog(rpcObject=user)
+        user_dialog.exec_()
+        self._update()
+
+    delete_info = ["Delete User", None, "kill"]
+    def delete(self, rpcObjects=None):
+        user = self._getSelected(rpcObjects)
+        opencue.api.deleteUser(user[0].data.name)
+        self._update()
 
 # pylint: disable=attribute-defined-outside-init
 class MenuActions(object):
@@ -1931,3 +1948,8 @@ class MenuActions(object):
         if not hasattr(self, "_limits"):
             self._limits = LimitActions(*self.__getArgs())
         return self._limits
+
+    def users(self):
+        if not hasattr(self, "_users"):
+            self._users = UserActions(*self.__getArgs())
+        return self._users
